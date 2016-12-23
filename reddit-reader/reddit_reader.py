@@ -26,5 +26,10 @@ def share_headlines():
     headline_msg = "The current world news headlines are {}".format(headlines)
     return statement(headline_msg)
 
+@ask.intent("NoIntent")
+def no_intent():
+    bye_text = "See you later then!"
+    return statement(bye_text)
+
 if __name__ == '__main__':
     app.run(debug=True)
