@@ -8,7 +8,7 @@ import unidecode
 SECRETS_FILE = "secrets.json"
 
 app = Flask(__name__)
-ask = Ask(app, '/reddit_reader')
+ask = Ask(app, '/')
 
 def get_headlines():
     with open(SECRETS_FILE) as f:
@@ -28,13 +28,6 @@ def get_headlines():
     titles = [unidecode.unidecode(listing['data']['title']) for listing in data['data']['children']]
     titles = "... ".join([i for i in titles])
     return titles
-
-titles = get_headlines()
-print titles
-
-@app.route('/')
-def homepage():
-    pass
 
 @ask.launch
 def start_skill():
