@@ -5,12 +5,17 @@ import time
 import requests
 import unidecode
 
+SECRETS_FILE = "secrets.json"
+
 app = Flask(__name__)
 ask = Ask(app, '/reddit_reader')
 
 def get_headlines():
-    login = {'username': "USERNAME",
-             'password': "PASSWORD",
+    with open(SECRETS_FILE) as f:
+        secrets = json.load(f)
+
+    login = {'username': secrets['username'],
+             'password': secrets['password'],
              'api_type': "json"}
 
     session = requests.Session()
@@ -23,6 +28,9 @@ def get_headlines():
     titles = [unidecode.unidecode(listing['data']['title']) for listing in data['data']['children']]
     titles = "... ".join([i for i in titles])
     return titles
+
+titles = get_headlines()
+print titles
 
 @app.route('/')
 def homepage():
