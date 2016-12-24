@@ -9,7 +9,20 @@ app = Flask(__name__)
 ask = Ask(app, '/reddit_reader')
 
 def get_headlines():
-    pass
+    login = {'username': "USERNAME",
+             'password': "PASSWORD",
+             'api_type': "json"}
+
+    session = requests.Session()
+    session.headers.update({'User-agent': "I am testing Alexa: SandChow"})
+    session.post("https://www.reddit.com/api/login", data=login)
+    time.sleep(1)
+    url = "https://reddit.com/r/worldnews/.json?limit=10"
+    html = session.get(url)
+    data = json.loads(html.content.decode('utf-8'))
+    titles = [unidecode.unidecode(listing['data']['title']) for listing in data['data']['children']]
+    titles = "... ".join([i for i in titles])
+    return titles
 
 @app.route('/')
 def homepage():
