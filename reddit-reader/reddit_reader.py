@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_ask import Ask, statement, question, session
+import logging
 import json
 import time
 import requests
@@ -9,6 +10,7 @@ SECRETS_FILE = "secrets.json"
 
 app = Flask(__name__)
 ask = Ask(app, '/')
+logging.getLogger("flask_ask").setLevel(logging.DEBUG)
 
 def get_headlines():
     with open(SECRETS_FILE) as f:
