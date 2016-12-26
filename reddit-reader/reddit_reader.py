@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_ask import Ask, statement, question, session
 import json
 import time
@@ -31,8 +31,7 @@ def get_headlines():
 
 @ask.launch
 def start_skill():
-    welcome_message = "Hey there, would you like the headlines of the day?"
-    return question(welcome_message)
+    return question(render_template('welcome_message'))
 
 @ask.intent("YesIntent")
 def share_headlines():
@@ -42,8 +41,7 @@ def share_headlines():
 
 @ask.intent("NoIntent")
 def no_intent():
-    bye_text = "See you later then!"
-    return statement(bye_text)
+    return statement(render_template('bye_message'))
 
 if __name__ == '__main__':
     app.run(debug=True)
