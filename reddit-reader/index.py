@@ -182,7 +182,7 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         },
         'card': {
             'type': 'Simple',
-            'title': title,
+            'title': 'World News',
             'content': output
         },
         'reprompt': {
