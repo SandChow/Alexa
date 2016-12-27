@@ -119,7 +119,7 @@ def get_help_response():
 def get_stop_response():
     session_attributes = {}
     card_title = "Stop"
-    speech_output = "Am I going too fast? Would you like me to repeat the headlines?"
+    speech_output = "Am I going too fast? Would you like me to repeat the headlines or would you like to exit?"
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
     reprompt_text = "I have not heard your response properly, would you like me to repeat the headlines again?"
@@ -186,7 +186,7 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
             'content': output
         },
         'reprompt': {
-            'outputSpeech': 
+            'outputSpeech': {
                 'type': 'PlainText',
                 'text': reprompt_text
             }
