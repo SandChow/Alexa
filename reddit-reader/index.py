@@ -5,6 +5,7 @@ Reddit-Reader implemented using AWS Lambda and Alexa Skills Kit.
 from __future__ import print_function
 import json, requests, unidecode, time
 
+SECRETS_FILE = "secrets.json"
 
 # --------------- Main handler ------------------
 
@@ -15,9 +16,11 @@ def lambda_handler(event, context):
     print("event.session.application.applicationId=" +
           event['session']['application']['applicationId'])
 
+    """
     if (event['session']['application']['applicationId'] is not
         "amzn1.ask.skill.2ac3515a-250a-4cec-bc0c-82888e433c34"):
         raise ValueError("Invalid Application ID")
+    """
 
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
@@ -63,11 +66,9 @@ def on_intent(intent_request, session):
     # Dispatch to your skill's intent handlers
     if intent_name == "YesIntent":
         return share_headlines(intent, session)
-    elif intent_name == "NoIntent":
-        return no_intent(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_welcome_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
+    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent" or intent_name == "NoIntent":
         return handle_session_end_request()
     else:
         raise ValueError("Invalid intent")
@@ -103,16 +104,10 @@ def get_welcome_response():
 
 def handle_session_end_request():
     card_title = "Session Ended"
-    speech_output = "Thank you for trying the Alexa Skills Kit sample. " \
-                    "Have a nice day! "
-    # Setting this to true ends the session and exits the skill.
+    speech_output = "See you later! Have a nice day."
     should_end_session = True
     return build_response({}, build_speechlet_response(
         card_title, speech_output, None, should_end_session))
-
-
-def create_favorite_color_attributes(favorite_color):
-    return {"favoriteColor": favorite_color}
 
 
 def share_headlines(intent, session):
@@ -128,20 +123,6 @@ def share_headlines(intent, session):
 
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
-
-
-def get_color_from_session(intent, session):
-    session_attributes = {}
-    reprompt_text = None
-
-    speech_output = "See you later!"
-    should_end_session = True
-
-    # Setting reprompt_text to None signifies that we do not want to reprompt
-    # the user. If the user does not respond or says something that is not
-    # understood, the session will end.
-    return build_response(session_attributes, build_speechlet_response(
-        intent['name'], speech_output, reprompt_text, should_end_session))
 
 
 def get_headlines():
@@ -160,7 +141,8 @@ def get_headlines():
     html = session.get(url)
     data = json.loads(html.content.decode('utf-8'))
     titles = [unidecode.unidecode(listing['data']['title']) for listing in data['data']['children']]
-    titles = "... ".join([i for i in titles])
+    titles = "............... ".join([i for i in titles])
+    titles += "............... Would you like me to repeat the headlines?" 
     return titles
 
 
