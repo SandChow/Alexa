@@ -67,8 +67,10 @@ def on_intent(intent_request, session):
     if intent_name == "YesIntent":
         return share_headlines(intent, session)
     elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent" or intent_name == "NoIntent":
+        return get_help_response()
+    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
+        return get_stop_response()
+    elif intent_name == "NoIntent":
         return handle_session_end_request()
     else:
         raise ValueError("Invalid intent")
@@ -100,6 +102,30 @@ def get_welcome_response():
     should_end_session = False
     return build_response(session_attributes, build_speechlet_response(
         card_title, speech_output, reprompt_text, should_end_session))
+
+
+def get_help_response():
+    session_attributes = {}
+    card_title = "Help"
+    speech_output = "If you would like the headlines of the day, say yes. Otherwise, say no."
+    # If the user either does not reply to the welcome message or says something
+    # that is not understood, they will be prompted again with this text.
+    reprompt_text = "I have not heard your response properly, would you like the news?"
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session)) 
+
+
+def get_stop_response():
+    session_attributes = {}
+    card_title = "Stop"
+    speech_output = "Am I going too fast? Would you like me to repeat the headlines?"
+    # If the user either does not reply to the welcome message or says something
+    # that is not understood, they will be prompted again with this text.
+    reprompt_text = "I have not heard your response properly, would you like me to repeat the headlines again?"
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session)) 
 
 
 def handle_session_end_request():
@@ -156,11 +182,11 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
         },
         'card': {
             'type': 'Simple',
-            'title': "SessionSpeechlet - " + title,
-            'content': "SessionSpeechlet - " + output
+            'title': title,
+            'content': output
         },
         'reprompt': {
-            'outputSpeech': {
+            'outputSpeech': 
                 'type': 'PlainText',
                 'text': reprompt_text
             }
