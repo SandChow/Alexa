@@ -107,7 +107,7 @@ def get_welcome_response():
 def get_help_response():
     session_attributes = {}
     card_title = "Help"
-    speech_output = "If you would like the headlines of the day, say yes. Otherwise, say no."
+    speech_output = "If you would like the headlines of the day, say yes. Otherwise, say no. So, would you like the news?"
     # If the user either does not reply to the welcome message or says something
     # that is not understood, they will be prompted again with this text.
     reprompt_text = "I have not heard your response properly, would you like the news?"
