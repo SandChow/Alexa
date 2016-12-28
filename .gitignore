@@ -2,3 +2,6 @@
 ngrok
 *secrets.json
 *.zip
+*node_modules
+*python_modules
+
